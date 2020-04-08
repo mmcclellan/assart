@@ -4,6 +4,15 @@ import boto3
 import os
 
 
+def gen_report(rec_list):
+    for rec in rec_list:
+        print("Bucket Name:", rec['bucket_name'])
+        print("\tCreation Date:", rec['creation_date'])
+        print("\tNumber of Files:", rec['num_files'])
+        print("\tTotal Size:", rec['total_size'], "Bytes")
+        print("")
+
+
 def main():
     parser = argparse.ArgumentParser(description='A simple S3 analytics reporting tool')
     parser.add_argument(
@@ -27,7 +36,7 @@ def main():
         record['num_files'] = num_files
         record['total_size'] = total_size
         records.append(record)
-    print(records)
+    gen_report(records)
 
 
 if __name__ == "__main__":
