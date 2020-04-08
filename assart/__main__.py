@@ -4,12 +4,20 @@ import boto3
 import os
 
 
-def gen_report(rec_list):
+def gen_report(rec_list, unit):
     for rec in rec_list:
         print("Bucket Name:", rec['bucket_name'])
         print("\tCreation Date:", rec['creation_date'])
         print("\tNumber of Files:", rec['num_files'])
-        print("\tTotal Size:", rec['total_size'], "Bytes")
+        total = "\tTotal Size:"
+        if unit == 'KB':
+            print(total, (rec['total_size'] / 1024), unit)
+        elif unit == 'MB':
+            print(total, (rec['total_size'] / 1024 / 1024), unit)
+        elif unit == 'GB':
+            print(total, (rec['total_size'] / 1024 / 1024 / 1024), unit)
+        else:
+            print(total, rec['total_size'], "bytes")
         print("\tLast Modified Date:", rec['last_modified_date'])
         print("")
 
@@ -17,7 +25,7 @@ def gen_report(rec_list):
 def main():
     parser = argparse.ArgumentParser(description='A simple S3 analytics reporting tool')
     parser.add_argument('-u', '--unit', required=False, type=str,
-                        choices=['kB', 'MB', 'GB'], help='Unit of Size')
+                        choices=['KB', 'MB', 'GB'], help='Unit of Size')
     args = parser.parse_args()
     s3 = boto3.resource('s3')
     buckets = list(s3.buckets.all())
@@ -41,7 +49,7 @@ def main():
         record['total_size'] = total_size
         record['last_modified_date'] = str(max(last_mod_list))
         records.append(record)
-    gen_report(records)
+    gen_report(records, args.unit)
 
 
 if __name__ == "__main__":
