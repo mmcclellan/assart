@@ -16,6 +16,16 @@ def main():
         record = {}
         record['bucket_name'] = bucket.name
         record['creation_date'] = str(bucket.creation_date)
+        num_files = 0
+        total_size = 0
+        bucket_objs = s3.Bucket(bucket.name)
+        for objs in bucket_objs.objects.all():
+            # check size to differtiate between folders and files
+            if objs.size > 0:
+                num_files += 1
+            total_size += objs.size
+        record['num_files'] = num_files
+        record['total_size'] = total_size
         records.append(record)
     print(records)
 
