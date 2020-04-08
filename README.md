@@ -16,7 +16,7 @@ Due to the experimental nature of the project, it is recommended that `assart` b
 $ cd ~/venvs
 $ python3 -m venv assartenv
 $ source assartenv/bin/activate
-$ pip install -i https://test.pypi.org/simple/ assart
+$ pip install assart
 ```
 
 ### Configuration
